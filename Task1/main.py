@@ -9,13 +9,13 @@ from argument_parser import ArgumentParser
 sns.set_theme()
 args = ArgumentParser().get_arguments()
 
-vaccines_years = {'Hepatitis A': 1950,
+vaccines_years = {'Hepatitis A': 1995,
                    'Measles': 1963,
-                   'Mumps': 1950,
-                   'Pertussis': 1950,
-                   'Polio': 1950,
-                   'Rubella': 1950,
-                   'Smallpox': 1950}
+                   'Mumps': 1948,
+                   'Pertussis': 1926,
+                   'Polio': 1955,
+                   'Rubella': 1969,
+                   'Smallpox': 1796}
 
 disease = args.disease
 disease_ns = disease.replace(' ', '-')
@@ -68,8 +68,8 @@ for state in args.states:
     plt.tight_layout()
     if (args.show_plot):
         plt.show()
-    plot.savefig(f'imgs/{disease_ns}/states/{disease_ns}_disease_rate_in_{state_ns}_sqrt_transform.png')
-    plt.close()
+    plot.savefig(f'imgs/{disease_ns}/states/{disease_ns}_disease_sqrt_rate_in_{state_ns}.png')
+    plt.close('all')
 
 count_max = 0
 sqrt_count_max = 0
@@ -122,10 +122,8 @@ for decade in args.decades:
     plt.title(f'{disease} disease rate in {decade}', fontsize=16)
     if (args.show_plot):
         plt.show()
-    fig.savefig(f'imgs/{disease_ns}/{disease_ns}_disease_rate_in_{decade}_sqrt_transform.png')
-    plt.cla()
-
-plt.close()
+    fig.savefig(f'imgs/{disease_ns}/{disease_ns}_disease_sqrt_rate_in_{decade}.png')
+    plt.close('all')
 
 # box 
 plot = sns.boxplot(x=df['year'], y=df['state'], data=df['count'])
