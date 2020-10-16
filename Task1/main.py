@@ -24,7 +24,6 @@ vaccine_year = vaccines_years[disease]
 if not os.path.exists(f'imgs/{disease_ns}/states'):
     os.makedirs(f'imgs/{disease_ns}/states')
 
-### 1
 df = pd.read_csv('us_contagious_diseases.csv', header=0, index_col=0)
 df = df[df['disease'] == disease]
 df['rate'] = (df['count'] / df['weeks_reporting']) * (100000 / df['population'])
@@ -121,8 +120,7 @@ for decade in args.decades:
         plt.show()
     fig.savefig(f'imgs/{disease_ns}/{disease_ns}_sqrt_rate_in_{decade}.png', dpi=args.dpi)
     plt.close('all')
-
-# box 
+ 
 vaccine_x = vaccine_year - min(df['year'])
 rate_max = max(df['rate'])
 
@@ -133,12 +131,28 @@ plt.annotate(f'{vaccine_year} - {disease} vaccine\nintroduction',
              xytext=(vaccine_x + 8, rate_max * 3 / 4 + rate_max / 10),
              arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
 fig = plot.get_figure()
-fig.set_size_inches(18, 6)
+fig.set_size_inches(12, 6)
 plt.title(f'Distribution of {disease} rates', fontsize=16)
-plt.xticks(rotation=65, horizontalalignment='right', fontweight='light')
-
+plt.xticks(rotation=75, horizontalalignment='right', fontweight='light')
 plt.tight_layout()
 if (args.show_plot):
     plt.show()
-fig.savefig(f'imgs/{disease_ns}/Distribution_of_{disease_ns}_rates.png', dpi=args.dpi)
+fig.savefig(f'imgs/{disease_ns}/Boxplot_distribution_of_{disease_ns}_rates.png', dpi=args.dpi)
 plt.close()
+
+rate_max = max(df['rate'])
+
+plot = sns.relplot(x=df['year'], y=df['rate'], hue=df['state'], kind='line', linewidth=0.75, legend=False)
+sns.lineplot(x=df['year'], y=df['rate'], color='r', linewidth=2.25)
+plt.axvline(vaccine_year, color='r')
+plt.annotate(f'{vaccine_year} - {disease} vaccine\nintroduction',
+            xy=(vaccine_year, rate_max * 3 / 4),
+            xytext=(vaccine_year + 8, rate_max * 3 / 4 + rate_max / 10),
+            arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
+plot.fig.set_size_inches(12, 6)
+plt.title(f'Distribution of {disease} rates', fontsize=16)
+plt.tight_layout()
+if (args.show_plot):
+    plt.show()
+plt.savefig(f'imgs/{disease_ns}/Lineplot_distribution_of_{disease_ns}_rates.png', dpi=args.dpi)
+plt.cla()

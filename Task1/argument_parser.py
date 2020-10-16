@@ -53,7 +53,7 @@ class ArgumentParser:
                                  help='Specify states to work with '
                                       '(default California)')
 
-        self.parser.add_argument('--states', dest='all_states', 
+        self.parser.add_argument('--states', dest='every_state', 
                                  action='store_const', const=True, default=False,
                                  help='Create plots for every state (overrides -s)')        
 
@@ -64,7 +64,7 @@ class ArgumentParser:
                                       '1940, 1950, 1960, 1970, 1980 '
                                       '(default 1950, 1960 & 1970)')
 
-        self.parser.add_argument('--decades', dest='all_decades', 
+        self.parser.add_argument('--decades', dest='every_decade', 
                                  action='store_const', const=True, default=False,
                                  help='Create plots for every decade (overrides -y)')                                       
 
@@ -72,10 +72,7 @@ class ArgumentParser:
 
     def get_arguments(self):
         self.args.dpi = None
-        if self.args.high_quality is True:
-            self.args.dpi = 600
-        if self.args.all_states is True:
-            self.args.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+        self.args.all_states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
                                 'Colorado', 'Connecticut', 'Delaware','District Of Columbia',
                                 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois',
                                 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
@@ -87,6 +84,10 @@ class ArgumentParser:
                                 'South Carolina', 'South Dakota', 'Tennessee', 'Texas',
                                 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
                                 'Wisconsin', 'Wyoming']
-        if self.args.all_decades is True:
+        if self.args.high_quality is True:
+            self.args.dpi = 600
+        if self.args.every_state is True:
+            self.args.states = self.args.all_states
+        if self.args.every_decade is True:
             self.args.decades = [1930, 1940, 1950, 1960, 1970, 1980]
         return self.args
