@@ -12,10 +12,10 @@ class ArgumentParser:
                         ' (Zastosowania informatyki w medycynie)'
                         '\n\nTask1'
                         '\n\nAuthors:'
-                        '\n  Paweł Jeziorski\t???'
-                        '\n  Barbara Morawska\t???'
+                        '\n  Paweł Jeziorski\t234066'
+                        '\n  Barbara Morawska\t234096'
                         '\n  Karol Podlewski\t234106'
-                        '\n  Andrzej Sasinowski\t???') 
+                        '\n  Andrzej Sasinowski\t234118')
 
         self.parser.add_argument('--show', dest='show_plot', 
                                  action='store_const', const=True, default=False,
