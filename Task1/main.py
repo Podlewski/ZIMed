@@ -44,7 +44,7 @@ for state in args.states:
                 arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
     plot.fig.set_size_inches(10, 6)
     plot.set_ylabels(f'Average {disease} rate per week')
-    plt.title(fr'{disease} rate for $\bf{state}$ per 100 000 people', fontsize=16)
+    plt.title(f'{disease} rate for {state} per 100 000 people', fontsize=16)
     plt.tight_layout()
     if (args.show_plot):
         plt.show()
@@ -60,7 +60,7 @@ for state in args.states:
                 arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
     plot.fig.set_size_inches(10, 6)
     plot.set_ylabels(f'Average {disease} square rate per week')
-    plt.title(fr'{disease} square rate for $\bf{state}$  per 100 000 people', fontsize=16)
+    plt.title(f'{disease} square rate for {state} per 100 000 people', fontsize=16)
     plt.tight_layout()
     if (args.show_plot):
         plt.show()
@@ -100,7 +100,7 @@ for decade in args.decades:
                     ha="left", fontsize=12, color='red')
     fig = plot.get_figure()
     fig.set_size_inches(6, 13)
-    plt.title(fr'{disease} rate in $\bf{decade}$ per 100 000 people', fontsize=16)
+    plt.title(f'{disease} rate in {decade}s per 100 000 people', fontsize=16)
     plt.tight_layout()
     if (args.show_plot):
         plt.show()
@@ -115,7 +115,7 @@ for decade in args.decades:
         plt.figtext(0.01, 0.01, "*red states were not states at that time",
                     ha="left", fontsize=12, color='red')
     plot.set(xlabel='square rate')
-    plt.text(-5, -1, fr'{disease} $\bf square $ $\bf rate $ in $\bf{decade}$ per 100 000 people', fontsize=16)
+    plt.text(-3.2, -1, f'{disease} square rate {decade}s per 100 000 people', fontsize=16)
     if (args.show_plot):
         plt.show()
     fig.savefig(f'imgs/{disease_ns}/{disease_ns}_sqrt_rate_in_{decade}.png', dpi=args.dpi)
@@ -144,7 +144,7 @@ plt.close()
 rate_max = max(df['rate'])
 
 plot = sns.relplot(x=df['year'], y=df['rate'], hue=df['state'], kind='line', linewidth=0.75)
-sns.lineplot(x=df['year'], y=df['rate'], color='r', linewidth=2.25)
+sns.lineplot(x=df['year'], y=df['rate'], color='k', linewidth=2.25)
 plt.axvline(vaccine_year, color='r')
 plt.annotate(f'{vaccine_year} - {disease} vaccine\nintroduction',
             xy=(vaccine_year, rate_max * 3 / 4),
