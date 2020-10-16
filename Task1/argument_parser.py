@@ -21,6 +21,10 @@ class ArgumentParser:
                                  action='store_const', const=True, default=False,
                                  help='Show plots during program run')
 
+        self.parser.add_argument('--quality', dest='high_quality', 
+                                 action='store_const', const=True, default=False,
+                                 help='Get plots in high dpi')   
+
         self.parser.add_argument('-d', metavar='DISEASE', dest='disease', 
                                  type=str, default='Measles',
                                  choices=['Hepatitis A', 'Measles', 'Mumps',
@@ -67,6 +71,9 @@ class ArgumentParser:
         self.args = self.parser.parse_args()
 
     def get_arguments(self):
+        self.args.dpi = None
+        if self.args.high_quality is True:
+            self.args.dpi = 600
         if self.args.all_states is True:
             self.args.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
                                 'Colorado', 'Connecticut', 'Delaware','District Of Columbia',
