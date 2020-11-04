@@ -143,7 +143,7 @@ plt.close()
 
 rate_max = max(df['rate'])
 
-plot = sns.relplot(x=df['year'], y=df['rate'], hue=df['state'], kind='line', linewidth=0.75)
+plot = sns.relplot(x=df['year'], y=df['rate'], hue=df['state'], kind='line', linewidth=0.75, palette='gist_ncar')
 sns.lineplot(x=df['year'], y=df['rate'], color='k', linewidth=2.25)
 plt.axvline(vaccine_year, color='r')
 plt.annotate(f'{vaccine_year} - {disease} vaccine\nintroduction',
@@ -151,7 +151,7 @@ plt.annotate(f'{vaccine_year} - {disease} vaccine\nintroduction',
             xytext=(vaccine_year + 8, rate_max * 3 / 4 + rate_max / 10),
             arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
 plot.fig.set_size_inches(12, 9)
-plt.title(f'Distribution of {disease} rates', fontsize=16)
+plt.title(f'Rates per year for each state ({disease})', fontsize=16)
 plot._legend.remove()
 plt.legend(bbox_to_anchor=(0.005, -0.1), loc='upper left', ncol=6, prop={'size': 9.85})
 plt.tight_layout()
