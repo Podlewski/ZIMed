@@ -3,19 +3,20 @@ import numpy as np
 import os
 import pandas as pd
 import seaborn as sns
-from argument_parser import ArgumentParser
+from scipy.stats import shapiro, stats
 
+from argument_parser import ArgumentParser
 
 sns.set_theme()
 args = ArgumentParser().get_arguments()
 
 vaccines_years = {'Hepatitis A': 1995,
-                   'Measles': 1963,
-                   'Mumps': 1948,
-                   'Pertussis': 1926,
-                   'Polio': 1955,
-                   'Rubella': 1969,
-                   'Smallpox': 1796}
+                  'Measles': 1963,
+                  'Mumps': 1948,
+                  'Pertussis': 1926,
+                  'Polio': 1955,
+                  'Rubella': 1969,
+                  'Smallpox': 1796}
 
 disease = args.disease
 disease_ns = disease.replace(' ', '-')
@@ -33,15 +34,15 @@ for state in args.states:
     state_df = df.drop(df[df['state'] != state].index)
     state_df['sqrt_rate'] = np.sqrt(state_df['rate'])
 
-    rate_max = max(state_df['rate']) 
+    rate_max = max(state_df['rate'])
     sqrt_rate_max = max(state_df['sqrt_rate'])
 
     plot = sns.relplot(x=state_df['year'], y=state_df['rate'], kind='line', marker='o')
     plt.axvline(vaccine_year, color='r')
     plt.annotate(f'{vaccine_year} - {disease} vaccine\nintroduction',
-                xy=(vaccine_year, rate_max * 3 / 4),
-                xytext=(vaccine_year + 8, rate_max * 3 / 4 + rate_max / 10),
-                arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
+                 xy=(vaccine_year, rate_max * 3 / 4),
+                 xytext=(vaccine_year + 8, rate_max * 3 / 4 + rate_max / 10),
+                 arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
     plot.fig.set_size_inches(10, 6)
     plot.set_ylabels(f'Average {disease} rate per week')
     plt.title(f'{disease} rate for {state} per 100 000 people', fontsize=16)
@@ -55,9 +56,9 @@ for state in args.states:
                        kind='line', marker='o')
     plt.axvline(vaccine_year, color='r')
     plt.annotate(f'{vaccine_year} - {disease} vaccine\nintroduction',
-                xy=(vaccine_year, sqrt_rate_max * 3 / 4),
-                xytext=(vaccine_year + 8, sqrt_rate_max * 3 / 4 + sqrt_rate_max / 10),
-                arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
+                 xy=(vaccine_year, sqrt_rate_max * 3 / 4),
+                 xytext=(vaccine_year + 8, sqrt_rate_max * 3 / 4 + sqrt_rate_max / 10),
+                 arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
     plot.fig.set_size_inches(10, 6)
     plot.set_ylabels(f'Average {disease} square rate per week')
     plt.title(f'{disease} square rate for {state} per 100 000 people', fontsize=16)
@@ -71,7 +72,7 @@ rate_max = 0
 sqrt_rate_max = 0
 
 for decade in args.decades:
-    deacde_df = df[(df['year'] >= decade) & (df['year'] < decade+10)]
+    deacde_df = df[(df['year'] >= decade) & (df['year'] < decade + 10)]
     deacde_df = deacde_df[['state', 'rate']].groupby('state').sum()
     deacde_df['sqrt_rate'] = np.sqrt(deacde_df['rate'])
 
@@ -81,13 +82,13 @@ for decade in args.decades:
 
     decade_sqrt_max = max(deacde_df['sqrt_rate'])
     if (decade_sqrt_max > sqrt_rate_max):
-        sqrt_rate_max = decade_sqrt_max      
+        sqrt_rate_max = decade_sqrt_max
 
-rate_max = (int(rate_max / 25) + 1) * 25 
-sqrt_rate_max = (int(sqrt_rate_max / 5) + 1) * 5 
+rate_max = (int(rate_max / 25) + 1) * 25
+sqrt_rate_max = (int(sqrt_rate_max / 5) + 1) * 5
 
 for decade in args.decades:
-    deacde_df = df[(df['year'] >= decade) & (df['year'] < decade+10)]
+    deacde_df = df[(df['year'] >= decade) & (df['year'] < decade + 10)]
     deacde_df = deacde_df[['state', 'rate']].groupby('state').sum()
     deacde_df['sqrt_rate'] = np.sqrt(deacde_df['rate'])
 
@@ -121,7 +122,6 @@ for decade in args.decades:
     fig.savefig(f'imgs/{disease_ns}/{disease_ns}_sqrt_rate_in_{decade}.png', dpi=args.dpi)
     plt.close('all')
 
- 
 vaccine_x = vaccine_year - min(df['year'])
 rate_max = max(df['rate'])
 
@@ -147,9 +147,9 @@ plot = sns.relplot(x=df['year'], y=df['rate'], hue=df['state'], kind='line', lin
 sns.lineplot(x=df['year'], y=df['rate'], color='k', linewidth=2.25)
 plt.axvline(vaccine_year, color='r')
 plt.annotate(f'{vaccine_year} - {disease} vaccine\nintroduction',
-            xy=(vaccine_year, rate_max * 3 / 4),
-            xytext=(vaccine_year + 8, rate_max * 3 / 4 + rate_max / 10),
-            arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
+             xy=(vaccine_year, rate_max * 3 / 4),
+             xytext=(vaccine_year + 8, rate_max * 3 / 4 + rate_max / 10),
+             arrowprops=dict(facecolor='black', shrink=0.05, headwidth=10, width=3))
 plot.fig.set_size_inches(12, 9)
 plt.title(f'Rates per year for each state ({disease})', fontsize=16)
 plot._legend.remove()
@@ -159,3 +159,34 @@ if (args.show_plot):
     plt.show()
 plt.savefig(f'imgs/{disease_ns}/Lineplot_distribution_of_{disease_ns}_rates.png', dpi=args.dpi)
 plt.cla()
+
+df['sqrt_rate'] = df['rate'].apply(lambda x: np.sqrt(x))
+new_df = df.groupby('year', as_index=False)['sqrt_rate'].mean()
+before_df = new_df[new_df['year'] < vaccine_year]
+
+stat, p = shapiro(before_df['sqrt_rate'])
+print('stat={:.5f}, p={:.5f}'.format(stat, p))
+alpha = 0.05
+if p > alpha:
+    print('Normal distribution (failed to reject H0)')
+else:
+    print('Not normal distribution (rejected H0)')
+
+after_df = new_df[new_df['year'] > (vaccine_year + 6)]
+
+stat, p = shapiro(after_df['sqrt_rate'])
+print('stat={:.5f}, p={:.5f}'.format(stat, p))
+if p > alpha:
+    print('Normal distribution (failed to reject H0)')
+else:
+    print('Not normal distribution (rejected H0)')
+
+stat, p = stats.ttest_ind(before_df['sqrt_rate'], after_df['sqrt_rate'], equal_var=False)
+print('stat={:.5f}, p={}'.format(stat, p))
+if p > alpha:
+    print('Equal means (failed to reject H0)')
+else:
+    print('Unequal means (rejected H0)')
+
+print('Mean before vaccine: {:.3f}'.format(before_df['sqrt_rate'].mean()))
+print('Mean after vaccine: {:.3f}'.format(after_df['sqrt_rate'].mean()))
