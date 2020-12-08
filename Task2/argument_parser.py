@@ -19,7 +19,12 @@ class ArgumentParser:
 
         self.parser.add_argument('--time', dest='time', action='store_const',
                                  const=True, default=False,
-                                 help='Print time measurement')                                        
+                                 help='Print time measurement (might not work \
+                                       correct with --plot')       
+
+        self.parser.add_argument('--plot', dest='plot', action='store_const',
+                                 const=True, default=False,
+                                 help='Show plots')                                  
 
         self.args = self.parser.parse_args()
 
