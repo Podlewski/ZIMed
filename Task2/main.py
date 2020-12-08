@@ -5,13 +5,14 @@ import numpy as np
 import pandas as pd
 from timeit import default_timer as timer
 import seaborn as sns
+from sklearn.ensemble import RandomForestClassifier
 
 from argument_parser import ArgumentParser
 
 
 # CONSTANTS 
 MIN_DBIRWT = 2700 
-
+MAX_FEATURES = 20
 
 ### PART 2.1
 
@@ -67,6 +68,27 @@ def plot(X, Y, x, y_line, name):
     plt.savefig(name, dpi=300)
     plt.clf()
     
+### PART 2.3
+def factorize_data (data):
+    data = data.apply(lambda x: pd.factorize(x)[0])
+    return data
+
+def drop_cols(data, cols):
+    for col in cols:
+        data = data.drop(col,1)
+    return data
+    
+def Forest_Classifier(X, Y):
+    model = RandomForestClassifier()
+    model.fit(X, Y)
+    return model
+
+def plot_feat_importances(model, col_names):
+    feat_importances = pd.Series(model.feature_importances_, index=col_names)
+    feat_importances.nlargest(MAX_FEATURES).plot(kind='barh')
+    plt.title('feature importances')
+    plt.show()     
+
 
 def main(args):    
     start = timer()  
@@ -94,6 +116,32 @@ def main(args):
     if args.time is True:
         print(f'Second part: {second_part - first_part:4.2f} s')
 
+    
+    ### 3
+    # drop unnecessery columns
+    unnecessery_cols = ['infant_id', 'term', 'mort', 'lbw', 'dbirwt' ]
+    disease_cols = ['anemia', 'cardiac', 'lung', 'diabetes', 'herpes', 'hydra', 'hemo', 'chyper', 'eclamp', 'incervix', 'renal', 'uterine', 'othermr']  
+    
+    X = factorize_data(singletons)
+    X = drop_cols(X, unnecessery_cols)
+    
+    # Label
+    Y = singletons['lbw'] 
+    
+    # Case1 : Only disease columns
+    X1 = X[disease_cols]
+    columns_names = X1.columns
+    plot_feat_importances(Forest_Classifier(X1, Y), columns_names)
+    
+    # Case2 : Non-disease columns
+    X2 = drop_cols(X, disease_cols)
+    columns_names = X2.columns
+    plot_feat_importances(Forest_Classifier(X2, Y), columns_names)
+    
+    # Case3 : All factors/columns, expect unnecessery columns
+    columns_names = X.columns
+    plot_feat_importances(Forest_Classifier(X, Y), columns_names)
+    
 
 if __name__ == "__main__":
     args = ArgumentParser().get_arguments()
