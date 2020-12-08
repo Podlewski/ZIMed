@@ -47,7 +47,7 @@ def print_morality(df, type):
 def plot_linear_reggresion(X, Y, x, show_plot):
     model = LinearRegression().fit(X, Y)
     y_line = model.coef_[0] * x + model.intercept_
-    plot(X, Y, x, y_line, 'Linear', show_plot)
+    plot(X, Y, x, y_line, '2-1-linear', show_plot)
 
 
 def plot_logistic_reggresion(X, Y, x, show_plot):
@@ -58,13 +58,14 @@ def plot_logistic_reggresion(X, Y, x, show_plot):
     for i in x:
         y = ((1 / (1 + math.exp(- (i * a_v)))) + b_v)
         y_line.append(y)
-    plot(X, Y, x, y_line, 'Logic', show_plot)
+    plot(X, Y, x, y_line, '2-2-logic', show_plot)
 
 
 def plot(X, Y, x, y_line, name, show_plot):
     plt.scatter(X, Y, color='black', s=0.5)
     plt.plot(x, y_line, color='blue', linewidth=1.5)
-    plt.title(f'{name} regression')
+    plt.xlabel('Birth weight [g]')
+    plt.ylabel('Tobacco use during pregnancy (1 - yes)')
     plt.tight_layout()
     plt.savefig(name, dpi=300)
     if show_plot is True:
@@ -89,7 +90,8 @@ def Forest_Classifier(X, Y):
 def plot_feat_importances(model, col_names, name, show_plot):
     feat_importances = pd.Series(model.feature_importances_, index=col_names)
     feat_importances.nlargest(MAX_FEATURES).plot(kind='barh')
-    plt.title('feature importances')
+    plt.xlabel('Importance')
+    plt.ylabel('Feature')
     plt.tight_layout()
     plt.savefig(name, dpi=300)    
     if show_plot is True:
@@ -149,18 +151,18 @@ def main(args):
     X1 = X[disease_cols]
     columns_names = X1.columns
     plot_feat_importances(Forest_Classifier(X1, Y), columns_names,
-                          'disease_forest', args.plot)
+                          '3-1-disease_forest', args.plot)
     
     # Case2 : Non-disease columns
     X2 = drop_cols(X, disease_cols)
     columns_names = X2.columns
     plot_feat_importances(Forest_Classifier(X2, Y), columns_names,
-                          'non-diesease_forest', args.plot)
+                          '3-2-non-diesease_forest', args.plot)
     
     # Case3 : All factors/columns, expect unnecessery columns
     columns_names = X.columns
     plot_feat_importances(Forest_Classifier(X, Y), columns_names,
-                          'all-forest', args.plot)
+                          '3-3-all-forest', args.plot)
 
     third_part = timer()
     if args.time is True:
