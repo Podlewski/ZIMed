@@ -23,3 +23,34 @@ Problems and Tasks:
     > Note 2: Experiment with different plots  to distinguish states from each other and to make the whole plot more readable.
 
 5. Prove hypotheses on effectiveness of vaccines for different diseases (at least 3 including the Measles disease). Use appropriate tests and provide statistical significance of your tests.
+
+
+## Task 2 
+
+Problem: Niska waga urodzeniowa
+
+Szef oddziału pediatrycznego w szpitalu miejskim w X stwierdził, że niska waga urodzeniowa (lbw – ang. low birth weight) może mieć negatywny wpływ na szanse przeżycia dziecka pierwszego roku. Rozważa rozpoczęcie programu, która pomoże kobietom w ciąży lepiej dbać o własne zdrowie, dzięki czemu zwiększa się szansa, aby ich dzieci rodziły się z prawidłową wagą urodzeniową. Przed przystąpieniem do realizacji programu, który wymaga znaczących nakładów finansowych, doktor chce się upewnić, że niska masa urodzeniowa rzeczywiście ma wpływ na zdrowie niemowląt, a zwłaszcza na ich szanse na przeżycie. Jego pytanie brzmi:
+
+    „Czy niska waga urodzeniowa naprawdę zmniejsza szanse na przeżycie dziecka powyżej jego pierwszych urodzin?”
+
+Do realizacji zadań dysponujesz danymi lbw (pliki singletons – ciąże pojedyncze oraz twins – ciąże bliźniacze, opis w pliku lbv.csv). Jest to publicznie dostępny zbiór danych powiązanych z danymi dotyczącymi narodzin i zgonów niemowląt. Każda linia pliku dotyczy jednego przypadku niemowlęcia i zawiera dane o dacie urodzenia oraz śmierci niemowlęcia, jeśli zmarł w ciągu roku. Zawiera również informacje o matce i ojcu. 
+
+Przyjmujemy, że niska masa urodzeniowa oznacza dbirwt < 2700 gram (wówczas należy przyjąć lbw=1, w przeciwnym przypadku lbw=0), zaś zmienną wyjściową (outcome) jest śmiertelność (mortality, mort=1 / mort=0)
+
+### Zadanie 2.1 (ocena 3)
+
+2.1.1 Poprzedni asystent sugerował zbadanie wpływu niskiej masy urodzeniowej na populację bliźniaków. Na podstawie analizy danych wyjaśnij lekarzowi, z czego mogło wynikać skupienie się na bliźniakach? Użyj danych lbw, aby oszacować średni wpływ niskiej masy urodzeniowej na śmiertelność w ciągu roku dla populacji bliźniaków. Aby to zrobić skutecznie, przeanalizuj przypadki bliźniaków, w których tylko jeden z nich znajduje się poniżej progu wagowego. 
+
+2.1.2 Czy ten średni wpływ można uogólnić na całą populację, w tym niemowlęta z ciąży pojedynczych? Czyli: Czy możemy założyć, że średni wpływ lbw w populacji niemowląt z ciąży pojedynczych jest taki sam, jak z ciąży bliźniaczych?
+
+> Wskazówka: oblicz współczynniki śmiertelności wśród bliźniaków i populacji niemowląt z ciąży pojedynczych.
+
+### Zadanie 2.2 (ocena 4)
+
+Szef oddziału pediatrycznego stwierdził, że chciałby nieco rozszerzyć swoje pytanie. Wyjaśnia, że ​​jego program byłby bezpośrednio ukierunkowany na rzucenie palenia wśród kobiet w ciąży, ponieważ wykazano, że dzieci urodzone przez kobiety, które palą podczas ciąży, są bardziej narażone na lbw. Jeśli palenie u matki naprawdę powoduje, że dzieci rodzą się z mniejszą wagą, program doktora byłby przydatny. Do analizy użyj danych dotyczących niemowląt z ciąż pojedynczych.
+
+Przeprowadź analizę współzależności (np. metodą regresji), aby ocenić wpływ palenia u matki na masę urodzeniową dziecka. 
+
+### Zadanie 2.3 (ocena 5)
+
+Zweryfikuj, jakie inne czynniki spośród badanych parametrów, mogą mieć wpływ na niską masę urodzeniową. Oprócz raportu z analizy przygotuj wyjaśnienie, jakich metod z zakresu statystycznej analizy danych i metod uczenia maszynowego mógłbyś użyć, jakie w rezultacie zostały wybrane i dlaczego.
