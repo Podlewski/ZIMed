@@ -15,7 +15,7 @@ class ArgumentParser:
                         '\n  Paweł Jeziorski\t234066'
                         '\n  Barbara Morawska\t234096'
                         '\n  Karol Podlewski\t234106'
-                        '\n  Andrzej Sasinowski\t234118')
+                        '\n  Andrzej Sasinowski\t234118') 
 
         self.parser.add_argument('--time', dest='time', action='store_const',
                                  const=True, default=False,

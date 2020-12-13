@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
 from timeit import default_timer as timer
 
 from argument_parser import ArgumentParser
@@ -13,6 +14,7 @@ from argument_parser import ArgumentParser
 # CONSTANTS 
 MIN_DBIRWT = 2700 
 MAX_FEATURES = 20
+TRAINING_SET_DIVISION = 0.8
 
 ### PART 2.1
 
@@ -82,9 +84,19 @@ def drop_cols(data, cols):
         data = data.drop(col,1)
     return data
     
-def Forest_Classifier(X, Y):
+def Forest_Classifier(data, labels, set_division):
     model = RandomForestClassifier()
-    model.fit(X, Y)
+    partition_index = int(len(data.index) * set_division)
+    training_data = data.iloc[:partition_index]
+    training_labels = labels.iloc[:partition_index]
+    model.fit(training_data, training_labels)
+
+    test_data = data.iloc[partition_index:]
+    test_labels = labels.iloc[partition_index:]
+    prediction = model.predict(test_data)
+    accuracy = metrics.accuracy_score(test_labels, prediction)
+
+    print(f'Random Forest accuracy: {accuracy:4.3f}')
     return model
 
 def plot_feat_importances(model, col_names, name, show_plot):
@@ -127,42 +139,46 @@ def main(args):
         print(f'SECOND PART: {second_part - first_part:4.2f} s\n')
     
     ### 3
-    # drop unnecessery columns
-    unnecessery_cols = ['infant_id', 'term', 'mort', 'dbirwt' ]
-    disease_cols = ['anemia', 'cardiac', 'lung', 'diabetes', 'herpes', 'hydra',
-        'hemo', 'chyper', 'eclamp', 'incervix', 'renal', 'uterine', 'othermr']  
-    
-    X = factorize_data(singletons)
-    X = drop_cols(X, unnecessery_cols)
+    for data, name in zip([singletons, twins], ['Singletons', 'Twins']):
+        unnecessery_cols = ['infant_id', 'term', 'mort', 'dbirwt' ]
+        disease_cols = ['anemia', 'cardiac', 'lung', 'diabetes', 'herpes', 'hydra',
+            'hemo', 'chyper', 'eclamp', 'incervix', 'renal', 'uterine', 'othermr']  
+        
+        X = factorize_data(data)
+        X = drop_cols(X, unnecessery_cols)
 
-    corr = X.corr().stack()
-    corr = corr[corr.index.get_level_values(0) != corr.index.get_level_values(1)]
-    corr = corr.sort_values(ascending = False)
-    corr = corr[corr.index.get_level_values(0) == 'lbw']
-    print('Correlations:')
-    print(f'{corr}\n')
+        print(f'{name}\n')
 
-    X = X.drop('lbw', 1)
+        corr = X.corr().stack()
+        corr = corr[corr.index.get_level_values(0) != corr.index.get_level_values(1)]
+        corr = corr.sort_values(ascending = False)
+        corr = corr[corr.index.get_level_values(0) == 'lbw']
+        t = corr[0] * math.sqrt(len(x) - 2)/math.sqrt(1 - corr[0] * corr[0])
+        print(f'Correlations (t = {t:5.3f},n = {len(x)}):')
+        print(f'{corr}\n')
 
-    # Label
-    Y = singletons['lbw'] 
-    
-    # Case1 : Only disease columns
-    X1 = X[disease_cols]
-    columns_names = X1.columns
-    plot_feat_importances(Forest_Classifier(X1, Y), columns_names,
-                          '3-1-disease_forest', args.plot)
-    
-    # Case2 : Non-disease columns
-    X2 = drop_cols(X, disease_cols)
-    columns_names = X2.columns
-    plot_feat_importances(Forest_Classifier(X2, Y), columns_names,
-                          '3-2-non-diesease_forest', args.plot)
-    
-    # Case3 : All factors/columns, expect unnecessery columns
-    columns_names = X.columns
-    plot_feat_importances(Forest_Classifier(X, Y), columns_names,
-                          '3-3-all-forest', args.plot)
+        X = X.drop('lbw', 1)
+        Y = data['lbw'] 
+        
+        # Case1 : Only disease columns
+        X1 = X[disease_cols]
+        columns_names = X1.columns
+        plot_feat_importances(Forest_Classifier(X1, Y, TRAINING_SET_DIVISION),
+                              columns_names, f'3-1-{name}-disease_forest',
+                              args.plot)
+        
+        # Case2 : Non-disease columns
+        X2 = drop_cols(X, disease_cols)
+        columns_names = X2.columns
+        plot_feat_importances(Forest_Classifier(X2, Y, TRAINING_SET_DIVISION),
+                              columns_names, f'3-2-{name}-non-diesease_forest',
+                              args.plot)
+        
+        # Case3 : All factors/columns, expect unnecessery columns
+        columns_names = X.columns
+        plot_feat_importances(Forest_Classifier(X, Y, TRAINING_SET_DIVISION),
+                              columns_names, f'3-3-{name}-all-forest',
+                              args.plot)
 
     third_part = timer()
     if args.time is True:
