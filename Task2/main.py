@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from scipy.stats import chisquare
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression
@@ -14,6 +15,7 @@ from argument_parser import ArgumentParser
 # CONSTANTS 
 MIN_DBIRWT = 2700 
 MAX_FEATURES = 20
+ALPHA = 0.05
 TRAINING_SET_DIVISION = 0.8
 
 ### PART 2.1
@@ -39,10 +41,20 @@ def morality_rate(df):
 
 def print_morality(df, type):
     print(f'{type} morality rate')
-    print(f'Comprehensive:      {morality_rate(df):4.2f} %')
-    print(f'Low body weight:    {morality_rate(df[df.lbw == True]):4.2f} %')
-    print(f'Higher body weight: {morality_rate(df[df.lbw == False]):4.2f} %\n')
+    print(f'  Comprehensive:      {morality_rate(df):4.2f} %')
+    print(f'  Low body weight:    {morality_rate(df[df.lbw == True]):4.2f} %')
+    print(f'  Higher body weight: {morality_rate(df[df.lbw == False]):4.2f} %\n')
 
+
+def print_chisquare(data, label):
+    print(f'{label} chisquare test')
+    stat, p = chisquare(data)
+    print('  stat={:.5f}, p={:.5f}'.format(stat, p))
+    if p > ALPHA:
+        print('  [✓] Failed to reject H0')
+    else:
+        print('  [✗] Rejected H0')
+    print()
 
 ### PART 2.2
 
@@ -84,7 +96,7 @@ def drop_cols(data, cols):
         data = data.drop(col,1)
     return data
     
-def Forest_Classifier(data, labels, set_division):
+def Forest_Classifier(data, labels, number, set_division):
     model = RandomForestClassifier()
     partition_index = int(len(data.index) * set_division)
     training_data = data.iloc[:partition_index]
@@ -96,7 +108,7 @@ def Forest_Classifier(data, labels, set_division):
     prediction = model.predict(test_data)
     accuracy = metrics.accuracy_score(test_labels, prediction)
 
-    print(f'Random Forest accuracy: {accuracy:4.3f}')
+    print(f'  {number} subset accuracy: {accuracy:4.3f}')
     return model
 
 def plot_feat_importances(model, col_names, name, show_plot):
@@ -118,10 +130,12 @@ def main(args):
     twins = add_lbw_column(twins)
     twins = reduce_twins_df(twins)
     print_morality(twins, 'Twins')
+    print_chisquare(twins['mort'], 'Twins')
 
     singletons = pd.read_csv('singletons.txt')
     singletons = add_lbw_column(singletons)
     print_morality(singletons, 'Singletons')
+    print_chisquare(singletons['mort'], 'Singletons')
 
     first_part = timer()
     if args.time is True:
@@ -147,38 +161,40 @@ def main(args):
         X = factorize_data(data)
         X = drop_cols(X, unnecessery_cols)
 
-        print(f'{name}\n')
-
         corr = X.corr().stack()
         corr = corr[corr.index.get_level_values(0) != corr.index.get_level_values(1)]
         corr = corr.sort_values(ascending = False)
         corr = corr[corr.index.get_level_values(0) == 'lbw']
         t = corr[0] * math.sqrt(len(x) - 2)/math.sqrt(1 - corr[0] * corr[0])
-        print(f'Correlations (t = {t:5.3f},n = {len(x)}):')
+        print(f'{name} correlations (t={t:5.3f}, n={len(x)}):')
         print(f'{corr}\n')
 
         X = X.drop('lbw', 1)
         Y = data['lbw'] 
         
+        print(f'Random Forest classificator for {name}')
+
         # Case1 : Only disease columns
         X1 = X[disease_cols]
         columns_names = X1.columns
-        plot_feat_importances(Forest_Classifier(X1, Y, TRAINING_SET_DIVISION),
+        plot_feat_importances(Forest_Classifier(X1, Y, '1st', TRAINING_SET_DIVISION),
                               columns_names, f'3-1-{name}-disease_forest',
                               args.plot)
         
         # Case2 : Non-disease columns
         X2 = drop_cols(X, disease_cols)
         columns_names = X2.columns
-        plot_feat_importances(Forest_Classifier(X2, Y, TRAINING_SET_DIVISION),
+        plot_feat_importances(Forest_Classifier(X2, Y, '2nd', TRAINING_SET_DIVISION),
                               columns_names, f'3-2-{name}-non-diesease_forest',
                               args.plot)
         
         # Case3 : All factors/columns, expect unnecessery columns
         columns_names = X.columns
-        plot_feat_importances(Forest_Classifier(X, Y, TRAINING_SET_DIVISION),
+        plot_feat_importances(Forest_Classifier(X, Y, '3rd', TRAINING_SET_DIVISION),
                               columns_names, f'3-3-{name}-all-forest',
                               args.plot)
+                              
+        print() # empty line
 
     third_part = timer()
     if args.time is True:
