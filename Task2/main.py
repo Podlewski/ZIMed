@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from scipy.stats import chisquare
+from scipy.stats import ttest_ind
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression
@@ -46,9 +46,9 @@ def print_morality(df, type):
     print(f'  Comprehensive:      {morality_rate(df):4.2f} %\n')
 
 
-def print_chisquare(data, label):
-    print(f'{label} chisquare test')
-    stat, p = chisquare(data)
+def print_welch(data1, data2):
+    print('Welch')
+    stat, p = ttest_ind(data1.mort, data2.mort, equal_var = False)
     print('  stat={:.5f}, p={:.5f}'.format(stat, p))
     if p > ALPHA:
         print('  [✓] Failed to reject H0')
@@ -130,12 +130,11 @@ def main(args):
     twins = add_lbw_column(twins)
     twins = reduce_twins_df(twins)
     print_morality(twins, 'Twins')
-    print_chisquare(twins['mort'], 'Twins')
 
     singletons = pd.read_csv('singletons.txt')
     singletons = add_lbw_column(singletons)
     print_morality(singletons, 'Singletons')
-    print_chisquare(singletons['mort'], 'Singletons')
+    print_welch(twins[twins.lbw == True], singletons[singletons.lbw == True])
 
     first_part = timer()
     if args.time is True:
