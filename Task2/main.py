@@ -41,9 +41,9 @@ def morality_rate(df):
 
 def print_morality(df, type):
     print(f'{type} morality rate')
-    print(f'  Comprehensive:      {morality_rate(df):4.2f} %')
     print(f'  Low body weight:    {morality_rate(df[df.lbw == True]):4.2f} %')
-    print(f'  Higher body weight: {morality_rate(df[df.lbw == False]):4.2f} %\n')
+    print(f'  Higher body weight: {morality_rate(df[df.lbw == False]):4.2f} %')
+    print(f'  Comprehensive:      {morality_rate(df):4.2f} %\n')
 
 
 def print_chisquare(data, label):
@@ -93,7 +93,7 @@ def factorize_data (data):
 
 def drop_cols(data, cols):
     for col in cols:
-        data = data.drop(col,1)
+        data = data.drop(col, 1, errors='ignore')
     return data
     
 def Forest_Classifier(data, labels, number, set_division):
@@ -154,12 +154,12 @@ def main(args):
     
     ### 3
     for data, name in zip([singletons, twins], ['Singletons', 'Twins']):
-        unnecessery_cols = ['infant_id', 'term', 'mort', 'dbirwt' ]
+        unnecessary_cols = ['infant_id', 'term', 'mort', 'dbirwt', 'pair_id', 'id', 'one_lbw']
         disease_cols = ['anemia', 'cardiac', 'lung', 'diabetes', 'herpes', 'hydra',
             'hemo', 'chyper', 'eclamp', 'incervix', 'renal', 'uterine', 'othermr']  
         
         X = factorize_data(data)
-        X = drop_cols(X, unnecessery_cols)
+        X = drop_cols(X, unnecessary_cols)
 
         corr = X.corr().stack()
         corr = corr[corr.index.get_level_values(0) != corr.index.get_level_values(1)]
