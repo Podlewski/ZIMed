@@ -10,7 +10,7 @@ from argument_parser import ArgumentParser
 sns.set_theme()
 args = ArgumentParser().get_arguments()
 
-vaccines_years = {'Hepatitis A': 1995,
+vaccines_years = {'Hepatitis_A': 1995,
                   'Measles': 1963,
                   'Mumps': 1948,
                   'Pertussis': 1926,

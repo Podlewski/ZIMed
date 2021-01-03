@@ -27,9 +27,9 @@ class ArgumentParser:
 
         self.parser.add_argument('-d', metavar='DISEASE', dest='disease', 
                                  type=str, default='Measles',
-                                 choices=['Hepatitis A', 'Measles', 'Mumps',
+                                 choices=['Hepatitis_A', 'Measles', 'Mumps',
                                           'Pertussis', 'Polio', 'Rubella', 'Smallpox'],
-                                 help='Specify disease to work with: Hepatitis A, '
+                                 help='Specify disease to work with: Hepatitis_A, '
                                       'Measles, Mumps, Pertussis, Polio, '
                                       'Rubella or Smallpox (default Measles)')
 
