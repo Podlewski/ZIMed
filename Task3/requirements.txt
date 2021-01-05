@@ -1,0 +1,6 @@
+pylibjpeg
+GDCM
+pylibjpeg-libjpeg
+matplotlib
+Flask
+flask-restful

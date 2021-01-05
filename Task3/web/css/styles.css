@@ -1,0 +1,34 @@
+body  {
+  background-image: url('../assets/img/brain_tlo.png');
+  background-repeat: repeat;
+  background-attachment: fixed;
+}
+
+.card {
+  margin-left: 2em;
+  margin-right: 2em;
+  margin-top: 6em;
+}
+
+.table-short-column {
+  width: 20%;
+}
+
+.table-long-column {
+  width: 40%;
+}
+
+.submit-button {
+  margin-top: 1.25em;
+}
+
+.upload-image {
+  width: 80%;
+  height: 80%;
+  margin: 1em;
+}
+
+.arrows {
+  padding-left: 5em;
+  padding-right: 5em;
+}
