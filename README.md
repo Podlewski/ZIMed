@@ -54,3 +54,23 @@ Przeprowadź analizę współzależności (np. metodą regresji), aby ocenić wp
 ### Zadanie 2.3 (ocena 5)
 
 Zweryfikuj, jakie inne czynniki spośród badanych parametrów, mogą mieć wpływ na niską masę urodzeniową. Oprócz raportu z analizy przygotuj wyjaśnienie, jakich metod z zakresu statystycznej analizy danych i metod uczenia maszynowego mógłbyś użyć, jakie w rezultacie zostały wybrane i dlaczego.
+
+
+## Task 3
+
+Problem: Czy metody maszynowego uczenia się mogą wspomóc radiologów w ich pracy
+
+Krwotok śródczaszkowy, czyli krwawienie, które występuje wewnątrz czaszki, jest poważnym problemem zdrowotnym wymagającym szybkiego i często intensywnego leczenia. Krwotoki śródczaszkowe stanowią przyczynę około 10% udarów, gdzie udar jest piątą najczęstszą przyczyną zgonów. Określenie lokalizacji i rodzaju krwotoku jest zatem kluczowe w leczeniu pacjenta. Gdy u pacjenta występują ostre objawy neurologiczne, takie jak silny ból głowy lub utrata przytomności, eksperci przeglądają medyczne obrazy czaszki pacjenta w celu wykrycia obecności, lokalizacji i rodzaju krwotoku. Proces jest skomplikowany i często czasochłonny. 
+
+Do wykonania zadania posłużą dane dostępne w ramach portalu: http://headctstudy.qure.ai/ oraz https://physionet.org/content/bhx-brain-bounding-box/1.1/ . Zadanie 3.1 wymaga pobrania wyłącznie kilku plików w formacie DICOM. Zadania 3.2 i 3.3 wymagają pobrania większej objętości danych – pozwalających na uzyskanie odpowiednich rezultatów.
+
+### Zadanie 3.1 (ocena 3)
+Opracuj rozwiązanie, które pozwala na pozyskanie metadanych z formatu DICOM. Dane powinny być zaprezentowane w czytelnej dla użytkownika formie.
+
+### Zadanie 3.2 (ocena 4)
+Na podstawie metadanych DICOM oraz etykiet ekspertów opisanych w pliku csv, sprawdź charakterystykę badanych przypadków w zależności od rodzaju. Czy mógłbyś na tej podstawie podać personelowi wnioski?
+
+### Zadanie 3.2 (ocena 5)
+Opracuj rozwiązanie z zakresu maszynowego uczenia się, które uwzględni (w wybrany przez Ciebie sposób) dane obrazowe jako główny element związany z poprawną klasyfikacją.
+
+> Uwaga końcowa: Problematyka zadania była przedmiotem konkursu w ramach: RSNA Intracranial Hemorrhage Detection (https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection/overview Dane z konkursu dostępne i mogą stanowić inspirację dla własnego rozwiązania.
