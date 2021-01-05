@@ -7,20 +7,20 @@ function load_image() {
     if (filed.files.length == 0) {
         alert("No files have been chosen.")
         return
-    }
-    else {
+    } else {
         let obr = document.getElementById("DICOM-image")
         obr.setAttribute("src", "./assets/img/103.gif")
     }
 
+    hide_3D_image()
 
     let formData = new FormData();
     const xhttp = new XMLHttpRequest();
-    
+
 
     xhttp.open("POST", `http://127.0.0.1:5000/metadata/`, true);
-    xhttp.onreadystatechange = function () {
-       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+    xhttp.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             console.log("Poszło")
             load_rentgen(CURRENT_IMAGE)
             load_table(CURRENT_IMAGE)
@@ -35,10 +35,8 @@ function load_image() {
         if ((!file || 0 === file.length)) {
             alert("Wymagany plik DICOM");
             return
-        }
-        else {
+        } else {
             formData.append("file" + ix, file);
-            //xhttp.send(file);
         }
     }
     xhttp.send(formData);
@@ -47,22 +45,22 @@ function load_image() {
 function load_table(table_number) {
     let req = new XMLHttpRequest();
     req.open('GET', `http://127.0.0.1:5000/opisy/${table_number}/`, true);
-    req.onreadystatechange = function () {
+    req.onreadystatechange = function() {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-             table_div = document.getElementById("metadata-table");
-             table_div.innerHTML = req.responseText;
-             
-             df = document.getElementById("opisy")
-             df.className = "table table-striped table-sm"
-             df.removeAttribute("border")
-             thead = df.firstElementChild
-             thead.className = "thead-dark"
-             tr = thead.firstElementChild
-             tr.removeAttribute("style")
-             ths = tr.children
-             for (i = 0; i < ths.length; i++) {
+            table_div = document.getElementById("metadata-table");
+            table_div.innerHTML = req.responseText;
+
+            df = document.getElementById("opisy")
+            df.className = "table table-striped table-sm"
+            df.removeAttribute("border")
+            thead = df.firstElementChild
+            thead.className = "thead-dark"
+            tr = thead.firstElementChild
+            tr.removeAttribute("style")
+            ths = tr.children
+            for (i = 0; i < ths.length; i++) {
                 let att = ths[i].setAttribute("scope", "col")
-             }
+            }
 
             tbody = df.lastElementChild
             trs = tbody.children
@@ -77,13 +75,12 @@ function load_table(table_number) {
                     thss[j].setAttribute("style", "word-wrap: break-word;min-width: 160px;max-width: 160px;");
                 }
             }
-         }
-     }
+        }
+    }
     req.send(null);
 }
 
-function load_rentgen(image_number)
-{
+function load_rentgen(image_number) {
     let obr = document.getElementById("DICOM-image")
     obr.setAttribute("src", `http://127.0.0.1:5000/obrazki/${image_number}/`)
 }
@@ -96,11 +93,11 @@ function left_arrow_click() {
     CURRENT_IMAGE--
     if (CURRENT_IMAGE < 0) {
         CURRENT_IMAGE = ALL_IMAGES_NUMBER - 1;
-     }
-     load_rentgen(CURRENT_IMAGE)
-     load_table(CURRENT_IMAGE)
+    }
+    load_rentgen(CURRENT_IMAGE)
+    load_table(CURRENT_IMAGE)
 
-     document.getElementById("numer").innerText = `${CURRENT_IMAGE + 1} \\ ${ALL_IMAGES_NUMBER}`
+    document.getElementById("numer").innerText = `${CURRENT_IMAGE + 1} \\ ${ALL_IMAGES_NUMBER}`
 }
 
 function right_arrow_click() {
@@ -111,11 +108,11 @@ function right_arrow_click() {
     CURRENT_IMAGE++
     if (CURRENT_IMAGE >= ALL_IMAGES_NUMBER) {
         CURRENT_IMAGE = 0
-     }
-     load_rentgen(CURRENT_IMAGE)
-     load_table(CURRENT_IMAGE)
+    }
+    load_rentgen(CURRENT_IMAGE)
+    load_table(CURRENT_IMAGE)
 
-     document.getElementById("numer").innerText = `${CURRENT_IMAGE + 1} \\ ${ALL_IMAGES_NUMBER}`
+    document.getElementById("numer").innerText = `${CURRENT_IMAGE + 1} \\ ${ALL_IMAGES_NUMBER}`
 }
 
 
@@ -129,9 +126,14 @@ function reset_image() {
     req.send(null);
 }
 
+function hide_3D_image() {
+    let elem = document.getElementById("3d-image")
+    elem.style.display = "none"
+}
+
 function get_3D_image() {
-    let elem = document.createElement("img");
+    let elem = document.getElementById("3d-image")
     elem.setAttribute("src", `http://127.0.0.1:5000/obrazki/3D/`);
     elem.setAttribute("class", "upload-image");
-    document.getElementById("3d-image").appendChild(elem);
+    elem.style.display = "block"
 }

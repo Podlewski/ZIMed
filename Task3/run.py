@@ -21,6 +21,7 @@ app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 256 * 1024 * 1024  # 256 MB
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0  # DO NOT CACHE
 
 
 def get_filename_by_number(number: int) -> str:

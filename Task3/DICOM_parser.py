@@ -1,10 +1,8 @@
 import pydicom
 import matplotlib.pyplot as plt
-import base64
 import os
 import pandas as pd
 import numpy as np
-from html import unescape
 
 
 def get_metadata(filename: str, METADATA, IMAGES):
@@ -133,4 +131,4 @@ def print_DICOM_in_terminal(filename):
     print(ds)
 
 
-print_DICOM_in_terminal('dcm_files/example_dicom.dcm')
+# print_DICOM_in_terminal('dcm_files/example_dicom.dcm')
