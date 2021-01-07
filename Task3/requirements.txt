@@ -3,4 +3,4 @@ GDCM
 pylibjpeg-libjpeg
 matplotlib
 Flask
-flask-restful
+requests

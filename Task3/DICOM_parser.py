@@ -124,11 +124,11 @@ def print_DICOM_in_terminal(filename):
     # Rysowanie obrazka
     fig = plt.figure()
     fig.patch.set_visible(False)
-    ax = fig.add_subplot(111)
+    fig.add_subplot(111)
     plt.axis('off')
     plt.imshow(ds.pixel_array, cmap=plt.cm.seismic)
     plt.show()
     print(ds)
 
 
-# print_DICOM_in_terminal('dcm_files/example_dicom.dcm')
+print_DICOM_in_terminal('dcm_files/example_dicom.dcm')
