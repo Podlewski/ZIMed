@@ -131,4 +131,4 @@ def print_DICOM_in_terminal(filename):
     print(ds)
 
 
-print_DICOM_in_terminal(r'.\dcm_files\db\CQ500CT104 CQ500CT104\Unknown Study\CT BONE\CT000004.dcm')
+# print_DICOM_in_terminal(r'.\dcm_files\example_dicom.dcm')
