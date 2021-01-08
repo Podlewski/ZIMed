@@ -131,4 +131,4 @@ def print_DICOM_in_terminal(filename):
     print(ds)
 
 
-print_DICOM_in_terminal(r'C:\Basia\Szkola\studia\rok_5\semestr_9\Zastosowanie_informatyki_w_medycynie\ZIMed\Task3\dcm_files\db\CQ500CT10 CQ500CT10\Unknown Study\CT PLAIN THIN\CT000000.dcm')
+print_DICOM_in_terminal(r'C:\Basia\Szkola\studia\rok_5\semestr_9\Zastosowanie_informatyki_w_medycynie\ZIMed\Task3\dcm_files\db\CQ500CT104 CQ500CT104\Unknown Study\CT BONE\CT000004.dcm')

@@ -58,9 +58,9 @@ r2 = [x + barWidth for x in r1]
 r3 = [x + barWidth for x in r2]
 
 plt.grid(alpha=0.2)
-plt.bar(r1, values_1, width=barWidth, edgecolor='white', label='R1')
-plt.bar(r2, values_2, width=barWidth, edgecolor='white', label='R2')
-plt.bar(r3, values_3, width=barWidth, edgecolor='white', label='R3')
+plt.bar(r1, values_1, width=barWidth, edgecolor='white', label='R1 - 6y experience')
+plt.bar(r2, values_2, width=barWidth, edgecolor='white', label='R2 - 4y experience')
+plt.bar(r3, values_3, width=barWidth, edgecolor='white', label='R3 - 1y experience')
 
 plt.xticks([r + barWidth for r in range(len(R1_cols))], labels, rotation=90)
 
@@ -83,6 +83,22 @@ haematoma_types = ['Intraventricular', 'Intraparenchymal', 'Subarachnoid', 'Chro
 df_IML['size'] = df_IML['width'] * df_IML['height']
 
 sns.displot(df_IML, x="size", hue="labelName", kind="kde", fill=True)
+plt.show()
+
+bins = 30
+f, axes = plt.subplots(3, 2, figsize=(10, 7))
+ax1 = sns.histplot(df_IML[df_IML['labelName'] == haematoma_types[0]], bins=bins, x="size", color="darkorange", ax=axes[0, 0])
+ax1.set_title(haematoma_types[0])
+ax2 = sns.histplot(df_IML[df_IML['labelName'] == haematoma_types[1]], bins=bins, x="size", color="lightcoral", ax=axes[0, 1])
+ax2.set_title(haematoma_types[1])
+ax3 = sns.histplot(df_IML[df_IML['labelName'] == haematoma_types[2]], bins=bins, x="size", color="royalblue", ax=axes[1, 0])
+ax3.set_title(haematoma_types[2])
+ax4 = sns.histplot(df_IML[df_IML['labelName'] == haematoma_types[3]], bins=bins, x="size", color="y", ax=axes[1, 1])
+ax4.set_title(haematoma_types[3])
+ax5 = sns.histplot(df_IML[df_IML['labelName'] == haematoma_types[4]], bins=bins, x="size", color="darkorchid", ax=axes[2, 0])
+ax5.set_title(haematoma_types[4])
+ax6 = sns.histplot(df_IML[df_IML['labelName'] == haematoma_types[5]], bins=bins, x="size", color="indigo", ax=axes[2, 1])
+ax6.set_title(haematoma_types[5])
 plt.show()
 
 sns.displot(df_IML, x="size", hue="labelName", fill=True)
