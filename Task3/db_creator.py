@@ -76,7 +76,8 @@ def move_file(path: str, db_folder: str, label: str, source_file: str, my_descri
                "series_instance": series_instance,
                "study_instance": study_instance,
                "category": label,
-               "description_source": source_file}
+               "description_source": source_file,
+               "path": new_path}
     backup_file.write(json.dumps(message))
     backup_file.write('\n')
     my_description.append(message)
