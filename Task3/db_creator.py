@@ -159,7 +159,51 @@ for url in tqdm(urls):
 
 backup_file.close()
 
-my_description_df = pd.Dataframe(my_description)
-my_description_df.to_csv('my_descriptions.csv')
+"""
+Download time: 8:49:49
+"""
 
+my_description_df = pd.DataFrame(my_description)
 print(my_description_df.groupby(by='category').count()['uuid'])
+"""
+category
+Chronic             3043
+Epidural             341
+Intraparenchymal    6257
+Intraventricular    2481
+Subarachnoid        7468
+Subdural            3819
+Name: uuid, dtype: int64
+"""
+
+df_chronic = my_description_df[my_description_df['category'] == 'Chronic']
+df_intraventricular = my_description_df[my_description_df['category'] == 'Intraventricular']
+df_intraparenchymal = my_description_df[my_description_df['category'] == 'Intraparenchymal']
+df_subarachnoid = my_description_df[my_description_df['category'] == 'Subarachnoid']
+df_subdural = my_description_df[my_description_df['category'] == 'Subdural']
+df_epidural = my_description_df[my_description_df['category'] == 'Epidural']
+
+df_chronic_sample = df_chronic.sample(frac=1)
+df_intraventricular_sample = df_intraventricular.sample(frac=1)
+df_intraparenchymal_sample = df_intraparenchymal.sample(frac=0.5)
+df_subarachnoid_sample = df_subarachnoid.sample(frac=0.45)
+df_subdural_sample = df_subdural.sample(frac=0.85)
+df_epidural_sample = df_epidural.sample(frac=1)
+frames = [df_epidural_sample, df_subdural_sample, df_subarachnoid_sample, df_intraparenchymal_sample,
+          df_intraventricular_sample, df_chronic_sample]
+df_balanced = pd.concat(frames)
+df_balanced_shuffled = df_balanced.sample(frac=1)
+print(df_balanced_shuffled.groupby(by='category').count()['uuid'])
+"""
+category
+Chronic             3043
+Epidural             341
+Intraparenchymal    3128
+Intraventricular    2481
+Subarachnoid        3361
+Subdural            3246
+Name: uuid, dtype: int64
+"""
+
+df_balanced_shuffled.to_csv('./dcm_files/my_description_balanced.csv', index=False)
+my_description_df.to_csv('./dcm_files/my_description.csv', index=False)

@@ -61,13 +61,15 @@ def change_label_to_int(label):
     elif label == 'Epidural':
         return 5
 
+
 models_directory = './dcm_files/models'
 if not os.path.isdir(models_directory):
     os.mkdir(models_directory)
 
 classes = ['Intraventricular', 'Intraparenchymal', 'Subarachnoid', 'Chronic', 'Subdural', 'Epidural']
 
-descriptions = pd.read_excel('./dcm_files/my_descriptions.xlsx', usecols=['category', 'path'])[0:50]
+# descriptions = pd.read_excel('./dcm_files/my_descriptions.xlsx', usecols=['category', 'path'])[0:50]
+descriptions = pd.read_csv('./dcm_files/my_description_balanced.csv', usecols=['category', 'path'])
 descriptions['category'] = descriptions['category'].apply(lambda x: change_label_to_int(x))
 print(descriptions.groupby(by='category').count())
 
