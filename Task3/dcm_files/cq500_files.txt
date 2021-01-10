@@ -489,7 +489,3 @@ https://s3.ap-south-1.amazonaws.com/qure.headct.study/CQ500-CT-96.zip
 https://s3.ap-south-1.amazonaws.com/qure.headct.study/CQ500-CT-97.zip
 https://s3.ap-south-1.amazonaws.com/qure.headct.study/CQ500-CT-98.zip
 https://s3.ap-south-1.amazonaws.com/qure.headct.study/CQ500-CT-99.zip
-https://s3.ap-south-1.amazonaws.com/qure.headct.study/reads.csv
-https://s3.ap-south-1.amazonaws.com/qure.headct.study/prediction_probabilities.csv
-https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.txt
-http://headctstudy.qure.ai/static/EULA.txt
