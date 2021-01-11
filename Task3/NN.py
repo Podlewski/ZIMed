@@ -69,7 +69,7 @@ if not os.path.isdir(models_directory):
 classes = ['Intraventricular', 'Intraparenchymal', 'Subarachnoid', 'Chronic', 'Subdural', 'Epidural']
 
 # descriptions = pd.read_excel('./dcm_files/my_descriptions.xlsx', usecols=['category', 'path'])[0:50]
-descriptions = pd.read_csv('./dcm_files/my_description_balanced.csv', usecols=['category', 'path'])
+descriptions = pd.read_csv('./dcm_files/my_description_balanced_with_path.csv', usecols=['category', 'path'])[::4]
 descriptions['category'] = descriptions['category'].apply(lambda x: change_label_to_int(x))
 print(descriptions.groupby(by='category').count())
 
@@ -128,13 +128,13 @@ model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     monitor=metric,
     mode='max',
     save_best_only=True)
-early = EarlyStopping(monitor='accuracy', mode='min', patience=3)
-learning_rate_reduction = ReduceLROnPlateau(monitor='accuracy', patience=3, verbose=1, factor=0.3, min_lr=0.000001)
-callbacks_list = [early, learning_rate_reduction, model_checkpoint_callback]
+#early = EarlyStopping(monitor='accuracy', mode='min', patience=3)
+#learning_rate_reduction = ReduceLROnPlateau(monitor='accuracy', patience=3, verbose=1, factor=0.3, min_lr=0.000001)
+callbacks_list = [model_checkpoint_callback]
 
 cnn.summary()
 cnn.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-cnn.fit(x_train, y_train, epochs=150, batch_size=32, callbacks=callbacks_list, shuffle=True)
+cnn.fit(x_train, y_train, epochs=100, batch_size=16, callbacks=callbacks_list, shuffle=True)
 cnn.save('./dcm_files/models/my_model.h5')
 
 pd.DataFrame(cnn.history.history).plot()
